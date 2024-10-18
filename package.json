@@ -1,0 +1,15 @@
+{
+  "name": "node-sqlite-service",
+  "version": "1.0.0",
+  "description": "A simple Node.js service to save form data using SQLite",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.1",
+    "express": "^4.18.2",
+    "nodemon": "^3.1.7",
+    "sqlite3": "^5.0.2"
+  }
+}
