@@ -1,0 +1,29 @@
+<VAST version="3.0">
+  <Ad id="vpaid-html5-ad">
+    <InLine>
+      <AdSystem version="1.0">ThirdPartyAdSystem</AdSystem>
+      <AdTitle>VPAID HTML5 Ad Example</AdTitle>
+      <Impression><![CDATA[https://example.com/impression]]></Impression>
+      <Creatives>
+        <Creative>
+          <Linear>
+            <Duration>00:00:30</Duration>
+            <MediaFiles>
+          
+               <MediaFile  apiFramework="VPAID" delivery="progressive" type="application/javascript" width="640" height="360">
+                                <![CDATA[https://salty-proximal-freeze.glitch.me/vpaidAd.js]]>
+                            </MediaFile>
+            </MediaFiles>
+            <TrackingEvents>
+              <Tracking event="start"><![CDATA[https://example.com/start]]></Tracking>
+              <Tracking event="complete"><![CDATA[https://example.com/complete]]></Tracking>
+            </TrackingEvents>
+            <VideoClicks>
+              <ClickThrough><![CDATA[https://example.com/clickthrough]]></ClickThrough>
+            </VideoClicks>
+          </Linear>
+        </Creative>
+      </Creatives>
+    </InLine>
+  </Ad>
+</VAST>

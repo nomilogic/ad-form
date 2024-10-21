@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fetch HTML and JavaScript Files</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      #result {
+        margin-top: 20px;
+        height: 400px;
+        position: absolute;
+      }
+      textarea {
+        width: 100%;
+        height: 200px;
+        margin-top: 10px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <h1>Fetch HTML and JavaScript Files</h1>
+      <form id="fetch-form">
+        <label for="htmlUrl">HTML File URL:</label>
+        <input
+          type="text"
+          id="htmlUrl"
+          placeholder="Enter HTML URL (optional)"
+        />
+        <br /><br />
+        <label for="htmlCode">Or paste HTML directly:</label>
+        <textarea
+          id="htmlCode"
+          placeholder="Paste your HTML here..."
+        ></textarea>
+        <br /><br />
+        <label for="jsUrl">JavaScript File URL (optional):</label>
+        <input
+          type="text"
+          id="jsUrl"
+          placeholder="Enter JavaScript URL (optional)"
+        />
+        <br /><br />
+        <label for="scriptOption">Select Script Handling:</label>
+        <select id="scriptOption">
+          <option value="combined">Combine HTML and JS</option>
+          <option value="separate">Separate Scripts from HTML</option>
+        </select>
+        <br /><br />
+        <button type="submit">Fetch</button>
+      </form>
+    </div>
+    <div id="result"></div>
+
+    <script>
+      function encodeToBase64(str) {
+        return btoa(unescape(encodeURIComponent(str)));
+      }
+
+      function decodeFromBase64(base64Str) {
+        return decodeURIComponent(escape(atob(base64Str)));
+      }
+      function stringToHex(str) {
+    return Array.from(str).map(c => c.charCodeAt(0).toString(16).padStart(2, '0')).join('');
+}
+
+// Example Usage:
+
+
+
+      document
+        .getElementById("fetch-form")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault(); // Prevent form submission
+
+          const htmlUrl = document.getElementById("htmlUrl").value;
+          const htmlCode = document.getElementById("htmlCode").value;
+          const jsUrl = document.getElementById("jsUrl").value;
+          const scriptOption = document.getElementById("scriptOption").value;
+
+          let htmlContent = "";
+          let scripts = [];
+
+          // Fetch HTML content from URL or use pasted HTML
+          if (htmlUrl) {
+            const fetchResult = await fetchHtmlAndJs(htmlUrl);
+            htmlContent = fetchResult.html;
+            scripts = fetchResult.scripts;
+          } else if (htmlCode) {
+            htmlContent = htmlCode.trim();
+            // Extract scripts from the pasted HTML
+            scripts = extractScripts(htmlContent);
+            
+          }
+          
+          // Fetch JS content if provided
+          if (jsUrl) {
+            const jsResult = await fetchJs(jsUrl);
+            scripts.push(jsResult);
+          }
+         console.log( encodeToBase64(htmlContent))
+         const hexEncoded = stringToHex(htmlContent);
+console.log(hexEncoded);
+          encodeToBase64(scripts);
+          // Handle display based on selected option
+          if (scriptOption === "combined") {
+            displayResults(htmlContent, scripts.join("\n\n"));
+          } else {
+            const cleanedHtml = htmlContent.replace(
+              /<script[^>]*>[\s\S]*?<\/script>/gi,
+              ""
+            );
+            displayResults(cleanedHtml.trim(), scripts);
+          }
+          
+        });
+
+      async function fetchHtmlAndJs(htmlUrl) {
+        try {
+          const response = await fetch(htmlUrl);
+          if (!response.ok) {
+            throw new Error(`Failed to fetch HTML: ${response.status}`);
+          }
+          const htmlContent = await response.text();
+
+          return {
+            html: htmlContent.trim(),
+            scripts: extractScripts(htmlContent), // Extract scripts from fetched HTML
+          };
+        } catch (error) {
+          console.error("Error fetching HTML:", error);
+          return { html: "", scripts: [] };
+        }
+      }
+
+      function extractScripts(htmlContent) {
+        const scriptRegex = /<script[^>]*>([\s\S]*?)<\/script>/gi;
+        const scripts = [];
+        let match;
+
+        while ((match = scriptRegex.exec(htmlContent)) !== null) {
+          scripts.push(match[1].trim());
+        }
+
+        return scripts;
+      }
+
+      async function fetchJs(jsUrl) {
+        try {
+          const response = await fetch(jsUrl);
+          if (!response.ok) {
+            throw new Error(`Failed to fetch JS: ${response.status}`);
+          }
+          const jsContent = await response.text();
+          return jsContent.trim();
+        } catch (error) {
+          console.error("Error fetching JS:", error);
+          return "";
+        }
+      }
+
+      function displayResults(html, scripts, type = "script") {
+        console.log(html, scripts);
+        let resultDiv = document.getElementById("result");
+        resultDiv.innerHTML = `
+                <h2>Fetched HTML:</h2>
+                <div style="border: 1px solid #ccc; padding: 10px; background: #f9f9f9;">${html}</div>
+                <h2>Extracted Scripts:</h2>
+                <pre></pre>
+            `;
+        if (type == "script") {
+          let scriptTag = document.createElement("script");
+          resultDiv.appendChild(scriptTag);
+          scriptTag.innerHTML = scripts;
+        } else if (type == "func") {
+          let func = new Function(
+            `let innerFunc=()=>{${scripts}}; innerFunc();`
+          );
+          setTimeout(() => {
+            func();
+          }, 300);
+        }
+      }
+    </script>
+  </body>
+</html>

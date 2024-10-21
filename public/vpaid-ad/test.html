@@ -1,0 +1,104 @@
+<html>
+  <body>
+    <script>
+      function minifyHTML(htmlText) {
+        // Remove newlines, extra spaces, and tabs between tags.
+        // Keep single spaces between words and ensure content in tags is preserved.
+        return htmlText
+          .replace(/\n+/g, " ") // Replace newlines with space
+          .replace(/\s+/g, " ") // Collapse multiple spaces into one
+          .replace(/>\s+</g, "><") // Remove space between tags
+          .trim(); // Trim leading/trailing spaces
+      }
+
+      // Example usage:
+     htmlText = `<div id="toast-container">
+    <style>
+        #toast-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            color: white;
+            text-align: center;
+            z-index: 9999;
+            display: none;
+        }
+
+        #toast-container p {
+            font-size: 18px;
+            margin: 0;
+        }
+
+        #skip-button {
+            margin-top: 15px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #skip-button:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+
+    <p>This is a toast notification!</p>
+    
+    <button id="skip-button"></button>
+    
+    <script>
+       
+    <script>
+</div>`;
+
+
+      const minifiedHTML = minifyHTML(htmlText);
+      console.log(minifiedHTML);
+
+      render = function () {
+        //html = `<div class="fetched-content"><h2>Fetched Content</h2><p>This content was loaded dynamically!</p></div>`;
+        html = `<style>.fetched-content {border: 1px solid #ccc; padding: 10px; margin-top: 20px; color: blue; /* Default color */} .t{color:orange}</style><div class="fetched-content"><h2 class="t">Fetched Content</h2><p>This content was loaded dynamically!</p></div>`;
+
+        css = `.fetched-content {border: 1px solid #ccc; padding: 10px; margin-top: 20px; color: blue; /* Default color */}`;
+
+        js = `
+        const fetchedContent = document.querySelector('.fetched-content');
+        fetchedContent.innerHTML += '<p>Content dynamically modified!</p>';
+    `;
+        js =` function showToast(buttonText = "Skip") {
+            document.getElementById('skip-button').textContent = buttonText;
+
+            document.getElementById('toast-container').style.display = 'block';
+            
+            document.getElementById('skip-button').addEventListener('click', function() {
+                document.getElementById('toast-container').style.display = 'none';
+            });
+        }
+
+        showToast("Dismiss");`;
+        // Create a function that renders the HTML
+        renderFunction = `
+        function render() {
+            const container = document.createElement('div');
+            document.body.appendChild(container);
+            container.innerHTML = '${minifiedHTML}';
+            ${js}
+        }
+        render();
+    `;
+
+        // Send the JavaScript function as a response
+        return new Function(renderFunction);
+      };
+      newFunction = render();
+      newFunction();
+    </script>
+  </body>
+</html>

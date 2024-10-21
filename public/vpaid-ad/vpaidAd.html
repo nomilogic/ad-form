@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VPAID HTML5 Ad</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: black;
+        }
+        #ad-container {
+            width: 640px;
+            height: 360px;
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div id="ad-container">
+        <!-- Ad content here -->
+        <h1 style="text-align: center; padding: 20px;">Your Ad Here</h1>
+    </div>
+
+    <script src="vpaidAd.js"></script>
+    <script>
+        // Create a new instance of VPAIDAd
+        const vpaidAd = window.getVPAIDAd();
+
+        // Mock implementation of VPAID methods
+        vpaidAd.subscribe('AdLoaded', () => {
+            console.log('Ad Loaded Event Triggered');
+        });
+
+        vpaidAd.subscribe('AdStarted', () => {
+            console.log('Ad Started Event Triggered');
+        });
+
+        vpaidAd.subscribe('AdComplete', () => {
+            console.log('Ad Completed Event Triggered');
+        });
+
+        // Call the initAd method when the page loads
+        window.addEventListener('load', () => {
+            vpaidAd.initAd(640, 360, 'normal', 500, null, null);
+            vpaidAd.startAd();
+        });
+    </script>
+</body>
+</html>

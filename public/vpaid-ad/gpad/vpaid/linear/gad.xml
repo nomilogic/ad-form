@@ -1,0 +1,74 @@
+<VAST version="3.0">
+    <Ad id="vpaid-html5-ad">
+        <InLine>
+            <AdSystem version="1.0">ThirdPartyAdSystem</AdSystem>
+            <AdTitle>VPAID HTML5 Ad Example</AdTitle>
+            <Impression>
+                <![CDATA[https://example.com/impression]]>
+            </Impression>
+            <Creatives>
+                <Creative>
+                    <Linear>
+                        <Duration>00:00:130</Duration>
+                        <AdParameters>
+                            <![CDATA[
+                           {
+                                "videos": 
+                                [
+                                {
+                                    "url": "https://salty-proximal-freeze.glitch.me/video1.mp4",
+                                    "mimetype": "video/mp4"
+                                }
+                                ], 
+                                "wrapperIFrame": 
+                                {
+                                    "src": "https://2civ.2cimple.com/jcrew-portrait-demi-more/index.html",
+                                    "width": 640, 
+                                    "height": 360, 
+                                    "frameBorder":  0,
+                                    "allow": "autoplay",
+                                    "allowFullscreen":  true,
+                                    "title": "Dynamic Iframe",
+                                    "styles": {}
+                                },
+                                "companions": "",
+                                "desiredBitrate": 256,
+                                "duration": 30,
+                                "expanded": false,
+                                "height": 360,
+                                "icons": "",
+                                "linear": true,
+                                "remainingTime": 30,
+                                "skippableState": false,
+                                "viewMode": "normal",
+                                "width": 640,
+                                "volume": 1.0,
+                                "videoEnabled": false,
+                                "wrapperEnabled": true
+                            }
+                            ]]>
+                        </AdParameters>
+                        <MediaFiles>
+                            <MediaFile  apiFramework="VPAID" delivery="progressive" type="application/javascript" width="640" height="360">
+                                <![CDATA[https://salty-proximal-freeze.glitch.me/vpaid_ad_cs.js]]>
+                            </MediaFile>
+                        </MediaFiles>
+                        <TrackingEvents>
+                            <Tracking event="start">
+                                <![CDATA[https://example.com/start]]>
+                            </Tracking>
+                            <Tracking event="complete">
+                                <![CDATA[https://example.com/complete]]>
+                            </Tracking>
+                        </TrackingEvents>
+                        <VideoClicks>
+                            <ClickThrough>
+                                <![CDATA[https://example.com/clickthrough]]>
+                            </ClickThrough>
+                        </VideoClicks>
+                    </Linear>
+                </Creative>
+            </Creatives>
+        </InLine>
+    </Ad>
+</VAST>

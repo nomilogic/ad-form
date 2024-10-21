@@ -1,0 +1,148 @@
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body,
+  html {
+    height: 100%;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f0f0f0;
+  }
+
+  #ad-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 2s ease-in-out;
+  }
+
+  #ad-content {
+    text-align: center;
+    width: 300px;
+  }
+
+  h4 {
+    color: teal;
+    margin-bottom: 13px;
+    padding: 2px;
+  }
+
+  .form-group {
+    margin-bottom: 15px;
+  }
+
+  label {
+    display: block;
+    font-weight: bold;
+    font-size: 14px;
+    color: #28a745;
+  }
+
+  input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  button {
+    width: 100%;
+    padding: 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #218838;
+  }
+
+  #message {
+    margin-top: 15px;
+    font-size: 14px;
+    color: green;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+</style>
+<div id="ad-container">
+  <div id="ad-content">
+    <form id="ad-form">
+      <h4>Submit Your Details</h4>
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" required />
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required />
+      </div>
+      <div class="form-group">
+        <label for="number">Phone Number</label>
+        <input type="tel" id="number" name="number" required />
+      </div>
+      <button type="submit">Submit</button>
+    </form>
+    <h4 id="message"></h4>
+  </div>
+</div>
+<script>
+  document
+    .getElementById("ad-form")
+    .addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      const number = document.getElementById("number").value;
+      const server = "https://salty-proximal-freeze.glitch.me/";
+      const localServer = "http://localhost:3000/";
+
+      const response = await fetch(server + "submit-form", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, email, number }),
+      });
+
+      const result = await response.json();
+
+      const messageDiv = document.getElementById("message");
+      const adForm = document.getElementById("ad-form");
+
+      if (response.ok) {
+        adForm.style.display = "none";
+        messageDiv.textContent = result.message;
+
+        // Notify the VPAID player that the ad is stopping
+        if (window.getVPAIDAd && typeof window.getVPAIDAd === "function") {
+          const vpaidAd = window.getVPAIDAd();
+          vpaidAd.stopAd(); // Triggers the AdStopped event to close the ad
+        }
+      } else {
+        messageDiv.textContent = result.error;
+      }
+    });
+</script>

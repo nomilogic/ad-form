@@ -1,0 +1,89 @@
+<!-- <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" /> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video.js with Google IMA VAST Ad</title>
+  <!-- Video.js CSS -->
+  <link href="https://vjs.zencdn.net/7.21.0/video-js.css" rel="stylesheet" />
+  <style>
+    .input-container {
+      margin-top: 20px;
+    }
+    .input-container input, .input-container textarea {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 10px;
+    }
+    .input-container button {
+      padding: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Video.js Player -->
+  <video id="videoPlayer" class="video-js vjs-default-skin" controls preload="auto" width="640" height="360">
+    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" />
+
+  </video>
+
+  <!-- Input for VAST URL or XML -->
+  <div class="input-container">
+    <input type="text" id="vastUrl" placeholder="Enter VAST XML URL" />
+    <textarea id="vastXmlInput" placeholder="Or paste VAST XML directly here..."></textarea>
+    <button id="loadAd">Load Ad</button>
+  </div>
+
+  <!-- Video.js and Plugin Scripts -->
+  <script src="https://vjs.zencdn.net/7.21.0/video.min.js"></script>
+  <script src="https://imasdk.googleapis.com/js/sdkloader/ima3.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/videojs-contrib-ads@6.9.0/dist/videojs-contrib-ads.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/videojs-ima@1.10.1/dist/videojs.ima.min.js"></script>
+
+  <script>
+    // Initialize Video.js player
+    var player = videojs('videoPlayer');
+
+    // Initialize Google IMA plugin
+    player.ima({
+      id: 'videoPlayer',
+      adTagUrl: '',  // Ad tag URL will be added dynamically
+      debug: true,   // Enable IMA debugging
+      adsRenderingSettings: {
+        enablePreloading: true,
+        autoAlign: true
+      }
+    });
+
+    // Function to load VAST Ad
+    document.getElementById('loadAd').addEventListener('click', function() {
+      var vastUrl = document.getElementById('vastUrl').value;
+      var vastXml = document.getElementById('vastXmlInput').value;
+
+      if (vastUrl) {
+        // If a VAST URL is provided, set the adTagUrl and request the ad
+        player.ima.changeAdTag(vastUrl);
+        player.ima.requestAds();
+      } else if (vastXml) {
+        // Convert VAST XML input into a Blob URL
+        
+        var vastUrlFromXml = 'data:application/xml,' + encodeURIComponent(vastXml);
+
+        // Use the Blob URL for ad playback
+        player.ima.changeAdTag(vastUrlFromXml);
+        player.ima
+        
+      } else {
+        alert('Please provide a VAST URL or paste VAST XML.');
+      }
+    });
+  </script>
+</body>
+</html>
+
+
+  
